@@ -396,7 +396,7 @@ ymaps.ready(function () {
 
         // Добавление линии на карту
         myMap.geoObjects.add(myPolyline);
-        myMap.setBounds(myPolyline.geometry.getBounds());
+        //myMap.setBounds(myPolyline.geometry.getBounds());
     });
 
 });
