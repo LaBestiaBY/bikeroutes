@@ -1,7 +1,7 @@
-define(['ymaps'], function (ymaps) {
+define(['ymaps', 'jquery'], function (ymaps, $) {
 
     var Map = function () {
-         console.log(ymaps);
+         // console.log(ymaps);
     };
 
     Map.prototype = {
@@ -9,7 +9,8 @@ define(['ymaps'], function (ymaps) {
         /**
          *
          */
-        init: function () {
+        init: function (containerSelector) {
+            this.mapContainer = containerSelector.slice(1);
             this.setupHandlers();
         },
 
@@ -29,7 +30,7 @@ define(['ymaps'], function (ymaps) {
 
                 console.log('map was loaded');
 
-                var myMap = new ymaps.Map("YMapsID", {
+                var myMap = new ymaps.Map(this.mapContainer, {
                     center: [53.9, 27.56],
                     zoom: 11,
                     // type: "yandex#publicMap", //satellite", publicMap"
