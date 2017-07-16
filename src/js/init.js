@@ -19,12 +19,12 @@ requirejs.config({
     },
     config: {
         fb: {
-            apiKey: "AIzaSyAml-n_cSuEruMzgZidEWNRT-3JTd06XZI",
-            authDomain: "todoappe.firebaseapp.com",
-            databaseURL: "https://todoappe.firebaseio.com",
-            projectId: "todoappe",
-            storageBucket: "todoappe.appspot.com",
-            messagingSenderId: "883430117576"
+            apiKey: "AIzaSyClmZ4kFlTpivFJ6VC-t0to8y3XP3RStH0",
+            authDomain: "bike-routes-493c2.firebaseapp.com",
+            databaseURL: "https://bike-routes-493c2.firebaseio.com",
+            projectId: "bike-routes-493c2",
+            storageBucket: "bike-routes-493c2.appspot.com",
+            messagingSenderId: "681122622740"
         }
     }
 });
