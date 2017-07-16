@@ -1,4 +1,4 @@
-define(['ymaps', 'jquery'], function (ymaps, $) {
+define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
 
     var Map = function () {
          // console.log(ymaps);
@@ -19,8 +19,11 @@ define(['ymaps', 'jquery'], function (ymaps, $) {
          */
         setupHandlers: function () {
 
-            ymaps.ready(this.mapReadyHandler.bind(this));
+            this.mapReadyHandler = this.mapReady.bind(this);
+            this.dataLoadedHandler = this.dataLoaded.bind(this);
 
+            ymaps.ready(this.mapReadyHandler);
+            eventManager.subscribe('data_loaded', this.dataLoadedHandler);
         },
 
         /**
@@ -61,12 +64,14 @@ define(['ymaps', 'jquery'], function (ymaps, $) {
 
                  myMap.geoObjects.add(squarePlacemark);*/
 
-                myPlacemark = new ymaps.Placemark([53.9, 27.56], {
-                    hintContent: 'Москва!',
-                    balloonContent: 'Столица России'
-                });
 
-                myMap.geoObjects.add(myPlacemark);
+
+                // myPlacemark = new ymaps.Placemark([53.9, 27.56], {
+                //     hintContent: 'Москва!',
+                //     balloonContent: 'Столица России'
+                // });
+                //
+                // myMap.geoObjects.add(myPlacemark);
 
 
 
@@ -139,7 +144,7 @@ define(['ymaps', 'jquery'], function (ymaps, $) {
                         console.log('click!');
                     });
 
-                    console.log(geoObjects._objects[0].geometry);//.properties._data["stroke-width"] = 15);
+                    //console.log(geoObjects._objects[0].geometry);//.properties._data["stroke-width"] = 15);
 
                     var polyline = new ymaps.Polyline(geoObjects._objects[0].geometry);
                     // polyline.options.openBalloonOnClick = true;
@@ -411,11 +416,11 @@ define(['ymaps', 'jquery'], function (ymaps, $) {
                         ], {
                             /* Свойства линии:
                              - балун ломаной */
-                            balloonContent: "Велосипедная дорожка"
+                            balloonContent: "Глав. Велосипедная дорожка"
                         }, {
                             /* Опции линии:
                              - отключение кнопки закрытия балуна */
-                            balloonCloseButton: false,
+                            balloonCloseButton: true,
                             // - цвет  и прозрачность линии
                             strokeColor: "0000FF55",
                             // - ширина линии
@@ -433,8 +438,15 @@ define(['ymaps', 'jquery'], function (ymaps, $) {
         /**
          *
          */
-        mapReadyHandler: function () {
+        mapReady: function () {
             this.render();
+        },
+
+        /**
+         *
+         */
+        dataLoaded: function (data) {
+            console.log('data loaded',data);
         }
 
     };

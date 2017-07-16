@@ -1,6 +1,7 @@
 requirejs.config({
     baseUrl: 'js/app',
     paths: {
+        eventManager: 'EventManager',
         ymaps: 'https://api-maps.yandex.ru/2.1/?lang=ru_RU&coordorder=longlat',
         underscore: '../libs/underscore-min',
         jquery: '../libs/jquery-3.2.1.min',
