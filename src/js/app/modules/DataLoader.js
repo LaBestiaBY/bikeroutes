@@ -1,7 +1,7 @@
 define(['jquery', 'eventManager'], function ($, eventManager) {
    
     var DataLoader = function () {
-        
+        this.source = '';
     };
     
     DataLoader.prototype = {
@@ -11,9 +11,19 @@ define(['jquery', 'eventManager'], function ($, eventManager) {
          * @param source
          */
         init: function (source) {
-            console.log(source);
+            this.source = source;
 
-            this.load(source);
+            this.setupHandlers();
+        },
+
+        /**
+         *
+         */
+        setupHandlers: function () {
+
+            this.mapRenderedHandler = this.mapReadered.bind(this);
+
+            eventManager.subscribe('map_rendered', this.mapRenderedHandler);
         },
 
         /**
@@ -23,8 +33,16 @@ define(['jquery', 'eventManager'], function ($, eventManager) {
         load: function (source) {
             $.getJSON( source, this.loadHandler)
                 .fail(function( jqxhr, status, error ) {
-                    eventManager.dispatch('data_failed', {status: status, error: error});
+                    eventManager.dispatch('data_load_failed', {status: status, error: error});
                 });
+        },
+
+        /**
+         *
+         */
+        mapReadered:function () {
+            console.log(this.source);
+            this.load(this.source);
         },
 
         /**

@@ -55,7 +55,7 @@ gulp.task('dev:fonts', function () {
         .pipe(gulp.dest('./src/fonts'));
 });
 
-gulp.task('dev', ['dev:js', 'dev:css', 'dev:fonts']);
+gulp.task('dev:build', ['dev:js', 'dev:css', 'dev:fonts']);
 
 gulp.task('watch', function () {
     watch('./src/js/**/*.js', function () {
