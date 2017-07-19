@@ -3672,7 +3672,7 @@
   },
   {
     "type": "placemark",
-    "id": 2,
+    "id": 1,
     "geometry": {
       "type": "Point",
       "coordinates": [
@@ -3681,7 +3681,22 @@
       ]
     },
     "properties": {
-      "iconContent": "Тестовый",
+      "iconContent": "Аквапарк",
+      "preset": "islands#yellowStretchyIcon"
+    }
+  },
+  {
+    "type": "placemark",
+    "id": 2,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        27.600544533806133,
+        53.842840768069784
+      ]
+    },
+    "properties": {
+      "iconContent": "Чижовка",
       "preset": "islands#yellowStretchyIcon"
     }
   }

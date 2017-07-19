@@ -16,7 +16,16 @@ define(['underscore', 'jquery', 'text!../../../html_templates/tmpl_main_menu.htm
 
             this.tmpl = _.template(htmlStr);
 
+            this.setupHandlers();
+
             this.render();
+        },
+
+        /**
+         *
+         */
+        setupHandlers: function () {
+            this.container.addEventListener('click', this.clickHandler);
         },
 
         /**
@@ -25,6 +34,13 @@ define(['underscore', 'jquery', 'text!../../../html_templates/tmpl_main_menu.htm
         render: function () {
             this.container.innerHTML = '';
             this.container.innerHTML = this.tmpl(); //{user: fb.getUserIsAuth()}
+        },
+
+        /**
+         *
+         */
+        clickHandler: function () {
+            console.log('menu click!');
         }
     };
 

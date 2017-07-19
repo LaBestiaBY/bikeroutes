@@ -94,37 +94,11 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
             geoObjects.map(function (geoObj) {
 
                 if (geoObj.type === GEO_OBJECTS_TYPES.ROUTE) {
-                    // Добавление линии на карту
-                    this.myMap.geoObjects.add(new ymaps.Polyline(geoObj.geometry.coordinates, {
-                            /* Свойства линии:
-                             - балун ломаной */
-                            balloonContent: geoObj.properties.description
-                        }, {
-                            /* Опции линии:
-                             - отключение кнопки закрытия балуна */
-                            balloonCloseButton: true,
-                            // - цвет  и прозрачность линии
-                            strokeColor: "0000FF55",
-                            // - ширина линии
-                            strokeWidth: geoObj.properties['stroke-width']
-                        }
-                    ));
+                    this.renderRoute(geoObj);
                 }
 
                 if (geoObj.type === GEO_OBJECTS_TYPES.PLACEMARK) {
-
-                    this.myMap.geoObjects.add(new ymaps.Placemark(geoObj.geometry.coordinates, {
-                            balloonContent: '<img src="http://img-fotki.yandex.ru/get/6114/82599242.2d6/0_88b97_ec425cf5_M" />',
-                            iconContent: geoObj.properties.iconContent
-                        }, {
-                            preset: geoObj.properties.preset,
-                            // Отключаем кнопку закрытия балуна.
-                            balloonCloseButton: false,
-                            // Балун будем открывать и закрывать кликом по иконке метки.
-                            hideIconOnBalloonOpen: false
-                        }
-                    ));
-
+                    this.renderPlacemark(geoObj);
                 }
 
             }.bind(this));
@@ -140,6 +114,46 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
             // this.myMap.geoObjects.get(1).properties.strokeColor = "0000FFFF";
 
 
+        },
+
+        /**
+         *
+         * @param geoObj
+         */
+        renderRoute: function (geoObj) {
+            // Добавление линии на карту
+            this.myMap.geoObjects.add(new ymaps.Polyline(geoObj.geometry.coordinates, {
+                    /* Свойства линии:
+                     - балун ломаной */
+                    balloonContent: geoObj.properties.description
+                }, {
+                    /* Опции линии:
+                     - отключение кнопки закрытия балуна */
+                    balloonCloseButton: true,
+                    // - цвет  и прозрачность линии
+                    strokeColor: "0000FF55",
+                    // - ширина линии
+                    strokeWidth: geoObj.properties['stroke-width']
+                }
+            ));
+        },
+
+        /**
+         *
+         * @param geoObj
+         */
+        renderPlacemark: function (geoObj) {
+            this.myMap.geoObjects.add(new ymaps.Placemark(geoObj.geometry.coordinates, {
+                    balloonContent: geoObj.properties.iconContent,
+                    iconContent: geoObj.properties.iconContent
+                }, {
+                    preset: geoObj.properties.preset,
+                    // Отключаем кнопку закрытия балуна.
+                    balloonCloseButton: true,
+
+                    hideIconOnBalloonOpen: false
+                }
+            ));
         },
 
         /**

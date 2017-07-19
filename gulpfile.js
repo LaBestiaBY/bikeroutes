@@ -4,6 +4,7 @@ var sass = require('gulp-sass');
 var minify = require('gulp-minify-css');
 var rjs = require('requirejs');
 var pump = require('pump');
+var watch = require('gulp-watch');
 var browserSync = require("browser-sync");
 reload = browserSync.reload;
 
@@ -58,10 +59,10 @@ gulp.task('dev:fonts', function () {
 gulp.task('dev:build', ['dev:js', 'dev:css', 'dev:fonts']);
 
 gulp.task('watch', function () {
-    watch('./src/js/**/*.js', function () {
+    watch('src/js/**/*.js', function () {
         gulp.start('dev:js');
     });
-    watch('./src/style/**/*.scss', function () {
+    watch('src/style/**/*.scss', function () {
         gulp.start('dev:css');
     });
 });
