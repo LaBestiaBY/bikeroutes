@@ -25,7 +25,8 @@ define(['underscore', 'jquery', 'text!../../../html_templates/tmpl_main_menu.htm
          *
          */
         setupHandlers: function () {
-            this.container.addEventListener('click', this.clickHandler);
+            // this.container.addEventListener('click', this.clickHandler);
+            this.container.addEventListener('change', this.changeHandler);
         },
 
         /**
@@ -39,8 +40,15 @@ define(['underscore', 'jquery', 'text!../../../html_templates/tmpl_main_menu.htm
         /**
          *
          */
-        clickHandler: function () {
-            console.log('menu click!');
+        // clickHandler: function () {
+        //     console.log('menu click!');
+        // },
+
+        /**
+         *
+         */
+        changeHandler: function () {
+            console.log('menu change!');
         }
     };
 
