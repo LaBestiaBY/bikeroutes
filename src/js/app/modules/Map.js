@@ -26,9 +26,11 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
 
             this.mapReadyHandler = this.mapReady.bind(this);
             this.dataLoadedHandler = this.dataLoaded.bind(this);
+            this.menuChangeHandler = this.menuChange.bind(this);
 
             ymaps.ready(this.mapReadyHandler);
             eventManager.subscribe('data_loaded', this.dataLoadedHandler);
+            eventManager.subscribe('menu_changed', this.menuChangeHandler);
         },
 
         /**
@@ -93,13 +95,7 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
 
             geoObjects.map(function (geoObj) {
 
-                if (geoObj.type === GEO_OBJECTS_TYPES.ROUTE) {
-                    this.renderRoute(geoObj);
-                }
-
-                if (geoObj.type === GEO_OBJECTS_TYPES.PLACEMARK) {
-                    this.renderPlacemark(geoObj);
-                }
+                this.myMap.geoObjects.add(geoObj.instance);
 
             }.bind(this));
 
@@ -118,42 +114,89 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
 
         /**
          *
-         * @param geoObj
+         * @param data
          */
-        renderRoute: function (geoObj) {
-            // Добавление линии на карту
-            this.myMap.geoObjects.add(new ymaps.Polyline(geoObj.geometry.coordinates, {
-                    /* Свойства линии:
-                     - балун ломаной */
-                    balloonContent: geoObj.properties.description
-                }, {
-                    /* Опции линии:
-                     - отключение кнопки закрытия балуна */
-                    balloonCloseButton: true,
-                    // - цвет  и прозрачность линии
-                    strokeColor: "0000FF55",
-                    // - ширина линии
-                    strokeWidth: geoObj.properties['stroke-width']
+        createGeoObjects: function (data) {
+            data.map(function (object) {
+                if (object.type === GEO_OBJECTS_TYPES.ROUTE) {
+                    this.geoObjects.push({
+                        id: object.id,
+                        instance: this.createRoute(object)
+                    });
                 }
-            ));
+
+                if (object.type === GEO_OBJECTS_TYPES.PLACEMARK) {
+                    this.geoObjects.push({
+                        id: object.id,
+                        instance: this.createPlacemark(object)
+                    });
+                }
+            }.bind(this));
+
+            this.renderGeoObjects(this.geoObjects);
         },
 
         /**
          *
-         * @param geoObj
+         * @param object
+         * @returns {ymaps.Polyline}
          */
-        renderPlacemark: function (geoObj) {
-            this.myMap.geoObjects.add(new ymaps.Placemark(geoObj.geometry.coordinates, {
-                    balloonContent: geoObj.properties.iconContent,
-                    iconContent: geoObj.properties.iconContent
+        createRoute: function (object) {
+            return new ymaps.Polyline(object.coordinates, {
+                    balloonContent: object.properties.description
                 }, {
-                    preset: geoObj.properties.preset,
-                    // Отключаем кнопку закрытия балуна.
                     balloonCloseButton: true,
+                    strokeColor: "0000FF55",
+                    strokeWidth: object.properties['stroke-width']
+                }
+            )
+        },
 
+        /**
+         *
+         * @param id
+         */
+        showGeoObjects: function (id) {
+
+            console.log(this.geoObjects);
+            this.geoObjects.map(function (geoObject) {
+                if (geoObject.id === id)
+                {
+                    this.myMap.geoObjects.add(geoObject.instance);
+                    console.log('added ' + geoObject.id + ' to map');
+                }
+            }.bind(this));
+        },
+
+        /**
+         *
+         * @param id
+         */
+        hideGeoObjects: function (id) {
+            this.geoObjects.map(function (geoObject) {
+                if (geoObject.id === id)
+                {
+                    this.myMap.geoObjects.remove( geoObject.instance );
+                    console.log('removed ' + geoObject.id + ' from map');
+                }
+            }.bind(this));
+        },
+
+        /**
+         *
+         * @param object
+         * @returns {ymaps.Placemark}
+         */
+        createPlacemark: function (object) {
+            return new ymaps.Placemark(object.coordinates, {
+                    balloonContent: object.properties.iconContent,
+                    iconContent: object.properties.iconContent
+                }, {
+                    preset: object.properties.preset,
+                    balloonCloseButton: true,
                     hideIconOnBalloonOpen: false
                 }
-            ));
+            )
         },
 
         /**
@@ -167,9 +210,21 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
          *
          */
         dataLoaded: function (data) {
+            this.createGeoObjects(data);
+        },
 
-            this.geoObjects = data;
-            this.renderGeoObjects(this.geoObjects);
+        /**
+         *
+         */
+        menuChange: function (data) {
+
+            if (data.checked) {
+                // console.log(data.id + " is visible now");
+                this.showGeoObjects(data.id);
+            } else {
+                // console.log(data.id + " is invisible now");
+                this.hideGeoObjects(data.id);
+            }
         }
 
     };

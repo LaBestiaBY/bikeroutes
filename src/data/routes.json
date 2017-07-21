@@ -1,10 +1,8 @@
 [
   {
     "type": "route",
-    "id": 0,
-    "geometry": {
-      "type": "LineString",
-      "coordinates": [
+    "id": "main-bike-route",
+    "coordinates": [
         [
           27.453942944772024,
           53.95613677591413
@@ -3661,8 +3659,7 @@
           27.600544533806133,
           53.842840768069784
         ]
-      ]
-    },
+      ],
     "properties": {
       "description": "Главная велосипедная дорожка",
       "stroke": "#1bad03",
@@ -3673,13 +3670,10 @@
   {
     "type": "placemark",
     "id": 1,
-    "geometry": {
-      "type": "Point",
-      "coordinates": [
-          27.453942944772024,
-          53.95613677591413
-      ]
-    },
+    "coordinates": [
+        27.453942944772024,
+        53.95613677591413
+    ],
     "properties": {
       "iconContent": "Аквапарк",
       "preset": "islands#yellowStretchyIcon"
@@ -3688,13 +3682,10 @@
   {
     "type": "placemark",
     "id": 2,
-    "geometry": {
-      "type": "Point",
-      "coordinates": [
-        27.600544533806133,
-        53.842840768069784
-      ]
-    },
+    "coordinates": [
+      27.600544533806133,
+      53.842840768069784
+    ],
     "properties": {
       "iconContent": "Чижовка",
       "preset": "islands#yellowStretchyIcon"

@@ -1,4 +1,4 @@
-define(['underscore', 'jquery', 'text!../../../html_templates/tmpl_main_menu.html'], function (_, $, htmlStr)
+define(['underscore', 'jquery', 'text!../../../html_templates/tmpl_main_menu.html', 'eventManager'], function (_, $, htmlStr, eventManager)
 {
     var Menu = function()
     {
@@ -47,8 +47,9 @@ define(['underscore', 'jquery', 'text!../../../html_templates/tmpl_main_menu.htm
         /**
          *
          */
-        changeHandler: function () {
-            console.log('menu change!');
+        changeHandler: function (e) {
+            // console.log('menu change!', e.target.id, e.target.checked);
+            eventManager.dispatch('menu_changed', {id: e.target.id, checked: e.target.checked});
         }
     };
 
