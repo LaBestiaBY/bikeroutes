@@ -21,7 +21,7 @@ define(['jquery', 'eventManager'], function ($, eventManager) {
          */
         setupHandlers: function () {
 
-            this.mapRenderedHandler = this.mapReadered.bind(this);
+            this.mapRenderedHandler = this.mapRendered.bind(this);
 
             eventManager.subscribe('map_rendered', this.mapRenderedHandler);
         },
@@ -40,8 +40,7 @@ define(['jquery', 'eventManager'], function ($, eventManager) {
         /**
          *
          */
-        mapReadered:function () {
-            console.log(this.source);
+        mapRendered:function () {
             this.load(this.source);
         },
 

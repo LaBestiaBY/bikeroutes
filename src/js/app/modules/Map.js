@@ -5,11 +5,9 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
         PLACEMARK: 'placemark'
     };
 
-    var Map = function () {
-        this.geoObjects = [];
-    };
+    return {
 
-    Map.prototype = {
+        geoObjects:[],
 
         /**
          *
@@ -37,51 +35,47 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
          *
          */
         render: function () {
+            this.myMap = new ymaps.Map(this.mapContainer, {
+                center: [53.9, 27.56],
+                zoom: 11,
+                // type: "yandex#publicMap", //satellite", publicMap"
+                controls: []
+            });
 
-                console.log('map was loaded');
+            eventManager.dispatch('map_rendered');
 
-                this.myMap = new ymaps.Map(this.mapContainer, {
-                    center: [53.9, 27.56],
-                    zoom: 11,
-                    // type: "yandex#publicMap", //satellite", publicMap"
-                    controls: []
-                });
+            /*
 
-                eventManager.dispatch('map_rendered');
+             велосипед
+             fa-bicycle
 
+             компас (ваше местоположение)
+             fa-compass
 
-                /*
+             еда
+             fa-cutlery
 
-                 велосипед
-                 fa-bicycle
+             настройки
+             fa-cogs
 
-                 компас (ваше местоположение)
-                 fa-compass
+             магазин
+             fa-shopping-cart
 
-                 еда
-                 fa-cutlery
+             иконка выпадающего списка
+             fa-sort-desc
 
-                 настройки
-                 fa-cogs
+             лайк
+             fa-thumbs-o-up
 
-                 магазин
-                 fa-shopping-cart
+             разводной ключ
+             fa-wrench
 
-                 иконка выпадающего списка
-                 fa-sort-desc
-
-                 лайк
-                 fa-thumbs-o-up
-
-                 разводной ключ
-                 fa-wrench
-
-                 кафе
-                 fa-coffee
+             кафе
+             fa-coffee
 
 
 
-                 */
+             */
 
         },
 
@@ -120,14 +114,14 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
             data.map(function (object) {
                 if (object.type === GEO_OBJECTS_TYPES.ROUTE) {
                     this.geoObjects.push({
-                        id: object.id,
+                        kind: object.kind,
                         instance: this.createRoute(object)
                     });
                 }
 
                 if (object.type === GEO_OBJECTS_TYPES.PLACEMARK) {
                     this.geoObjects.push({
-                        id: object.id,
+                        kind: object.kind,
                         instance: this.createPlacemark(object)
                     });
                 }
@@ -146,40 +140,10 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
                     balloonContent: object.properties.description
                 }, {
                     balloonCloseButton: true,
-                    strokeColor: "0000FF55",
+                    strokeColor: "0000FF88",
                     strokeWidth: object.properties['stroke-width']
                 }
             )
-        },
-
-        /**
-         *
-         * @param id
-         */
-        showGeoObjects: function (id) {
-
-            console.log(this.geoObjects);
-            this.geoObjects.map(function (geoObject) {
-                if (geoObject.id === id)
-                {
-                    this.myMap.geoObjects.add(geoObject.instance);
-                    console.log('added ' + geoObject.id + ' to map');
-                }
-            }.bind(this));
-        },
-
-        /**
-         *
-         * @param id
-         */
-        hideGeoObjects: function (id) {
-            this.geoObjects.map(function (geoObject) {
-                if (geoObject.id === id)
-                {
-                    this.myMap.geoObjects.remove( geoObject.instance );
-                    console.log('removed ' + geoObject.id + ' from map');
-                }
-            }.bind(this));
         },
 
         /**
@@ -197,6 +161,37 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
                     hideIconOnBalloonOpen: false
                 }
             )
+        },
+
+        /**
+         *
+         * @param kind
+         */
+        showGeoObjects: function (kind) {
+            // console.log('showGeoObject', kind);
+            // console.log(this.geoObjects);
+            this.geoObjects.map(function (geoObject) {
+                if (geoObject.kind === kind)
+                {
+                    this.myMap.geoObjects.add(geoObject.instance);
+                    console.log('added ' + geoObject.kind + ' to map');
+                }
+            }.bind(this));
+        },
+
+        /**
+         *
+         * @param kind
+         */
+        hideGeoObjects: function (kind) {
+            // console.log('hideGeoObjects', kind);
+            this.geoObjects.map(function (geoObject) {
+                if (geoObject.kind === kind)
+                {
+                    this.myMap.geoObjects.remove( geoObject.instance );
+                    console.log('removed ' + geoObject.kind + ' from map');
+                }
+            }.bind(this));
         },
 
         /**
@@ -219,16 +214,12 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
         menuChange: function (data) {
 
             if (data.checked) {
-                // console.log(data.id + " is visible now");
-                this.showGeoObjects(data.id);
+                // console.log(data.kind + " is visible now");
+                this.showGeoObjects(data.kind);
             } else {
-                // console.log(data.id + " is invisible now");
-                this.hideGeoObjects(data.id);
+                // console.log(data.kind + " is invisible now");
+                this.hideGeoObjects(data.kind);
             }
         }
-
     };
-
-    return new Map();
-
 });

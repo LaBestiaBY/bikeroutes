@@ -1,0 +1,28 @@
+[debug] [2017-07-23T16:23:27.220Z] ----------------------------------------------------------------------
+[debug] [2017-07-23T16:23:27.222Z] Command:      C:\Program Files\nodejs\node.exe C:\Users\USER\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] [2017-07-23T16:23:27.223Z] CLI Version:  3.9.1
+[debug] [2017-07-23T16:23:27.223Z] Platform:     win32
+[debug] [2017-07-23T16:23:27.223Z] Node Version: v6.10.3
+[debug] [2017-07-23T16:23:27.223Z] Time:         Sun Jul 23 2017 19:23:27 GMT+0300 (Беларусь (зима))
+[debug] [2017-07-23T16:23:27.223Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-07-23T16:23:27.234Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-07-23T16:23:27.234Z] > authorizing via signed-in user
+[debug] [2017-07-23T16:23:27.237Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/bike-routes-493c2  
+ Sun Jul 23 2017 19:23:27 GMT+0300 (Беларусь (зима))
+[debug] [2017-07-23T16:23:28.073Z] <<< HTTP RESPONSE 200
+[debug] [2017-07-23T16:23:28.074Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/bike-routes-493c2/tokens  
+ Sun Jul 23 2017 19:23:28 GMT+0300 (Беларусь (зима))
+[debug] [2017-07-23T16:23:28.779Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'D:\work\ITacademy\javaScript\bikeroutes'...
+[info] 
+[debug] [2017-07-23T16:23:28.786Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/bike-routes-493c2  
+ Sun Jul 23 2017 19:23:28 GMT+0300 (Беларусь (зима))
+[debug] [2017-07-23T16:23:29.783Z] <<< HTTP RESPONSE 200
+[debug] [2017-07-23T16:23:29.783Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/681122622740/clients/_:getWebAppConfig  
+ Sun Jul 23 2017 19:23:29 GMT+0300 (Беларусь (зима))
+[debug] [2017-07-23T16:23:30.384Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] +  hosting: Local server: http://localhost:5000
+
