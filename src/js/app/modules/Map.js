@@ -156,11 +156,31 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
                     balloonContent: object.properties.iconContent,
                     iconContent: object.properties.iconContent
                 }, {
-                    preset: object.properties.preset,
+                    preset: 'islands#glyphIcon', //object.properties.preset, 'islands#glyphCircleIcon',
+                    iconGlyph: 'wrench',
+                    // iconGlyphColor: 'green', // цвет глифа
+                    // iconColor: 'green', // цвет самой метки
                     balloonCloseButton: true,
                     hideIconOnBalloonOpen: false
                 }
             )
+
+
+                // https://tech.yandex.ru/maps/doc/jsapi/2.1/dg/concepts/geoobjects-docpage/#glyph-icons
+                //
+
+                // .add(new ymaps.Placemark([55.684758, 37.738521], {}, {
+                //     preset: 'islands#glyphIcon',
+                //     // Задаем имя глиф-иконки.
+                //     iconGlyph: glyphNames[Math.floor(Math.random() * glyphNames.length)],
+                //     // Задаем цвет глиф-иконки.
+                //     iconGlyphColor: 'blue',
+                //     // Задаем цвет метки.
+                //     iconColor: 'blue'
+                // }))
+
+
+
         },
 
         /**
