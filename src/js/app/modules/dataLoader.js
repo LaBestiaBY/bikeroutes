@@ -1,10 +1,8 @@
 define(['jquery', 'eventManager'], function ($, eventManager) {
-   
-    var DataLoader = function () {
-        this.source = '';
-    };
-    
-    DataLoader.prototype = {
+
+    return {
+
+        source:'',
 
         /**
          *
@@ -12,7 +10,6 @@ define(['jquery', 'eventManager'], function ($, eventManager) {
          */
         init: function (source) {
             this.source = source;
-
             this.setupHandlers();
         },
 
@@ -52,7 +49,4 @@ define(['jquery', 'eventManager'], function ($, eventManager) {
             eventManager.dispatch('data_loaded', data);
         }
     };
-
-    return new DataLoader();
-
 });

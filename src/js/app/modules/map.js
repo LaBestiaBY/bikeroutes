@@ -85,25 +85,10 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
          */
         renderGeoObjects: function(geoObjects)
         {
-            // console.log(geoObjects[0].geometry.coordinates);
-
             geoObjects.map(function (geoObj) {
-
                 this.myMap.geoObjects.add(geoObj.instance);
-
             }.bind(this));
-
             this.myMap.setBounds(this.myMap.geoObjects.getBounds());
-
-            // console.log(this.myMap.geoObjects.getLength());
-
-            // this.myMap.geoObjects.remove( this.myMap.geoObjects.get(2) );
-            // this.myMap.geoObjects.remove( this.myMap.geoObjects.get(1) );
-            // this.myMap.geoObjects.remove( this.myMap.geoObjects.get(0) );
-
-            // this.myMap.geoObjects.get(1).properties.strokeColor = "0000FFFF";
-
-
         },
 
         /**
@@ -128,6 +113,12 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
             }.bind(this));
 
             this.renderGeoObjects(this.geoObjects);
+
+            this.myMap.geoObjects.events.add('click', function (e) {
+                console.log('Дошло до коллекции объектов карты');
+                // Получение ссылки на дочерний объект, на котором произошло событие.
+                console.log(e.get('target'));
+            });
         },
 
         /**
@@ -164,23 +155,6 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
                     hideIconOnBalloonOpen: false
                 }
             )
-
-
-                // https://tech.yandex.ru/maps/doc/jsapi/2.1/dg/concepts/geoobjects-docpage/#glyph-icons
-                //
-
-                // .add(new ymaps.Placemark([55.684758, 37.738521], {}, {
-                //     preset: 'islands#glyphIcon',
-                //     // Задаем имя глиф-иконки.
-                //     iconGlyph: glyphNames[Math.floor(Math.random() * glyphNames.length)],
-                //     // Задаем цвет глиф-иконки.
-                //     iconGlyphColor: 'blue',
-                //     // Задаем цвет метки.
-                //     iconColor: 'blue'
-                // }))
-
-
-
         },
 
         /**
@@ -219,6 +193,28 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
          */
         mapReady: function () {
             this.render();
+
+            /*var myPlacemark1 = new ymaps.Placemark([27.54613187718493,
+                53.91824749634943], {}, {
+                iconLayout: 'default#image',
+                iconImageClipRect: [[0,0], [30, 35]],
+                iconImageHref: 'img/markers.png',
+                iconImageSize: [30, 35],
+                iconImageOffset: [-15, -35]
+            });
+
+            this.myMap.geoObjects.add(myPlacemark1);
+
+            var myPlacemark2 = new ymaps.Placemark([27.55613187718493,
+                53.91824749634943], {}, {
+                iconLayout: 'default#image',
+                iconImageClipRect: [[30,0], [54, 28]],
+                iconImageHref: 'img/markers.png',
+                iconImageSize: [24, 28],
+                iconImageOffset: [-12, -28]
+            });
+
+            this.myMap.geoObjects.add(myPlacemark2);*/
         },
 
         /**

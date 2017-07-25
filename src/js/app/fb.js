@@ -6,9 +6,7 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
          */
         init: function () {
             firebase.initializeApp(module.config());
-
             this.userIsAuth = firebase.auth().currentUser || null;
-
             this.setupEvents();
         },
 
