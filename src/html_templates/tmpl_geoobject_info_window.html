@@ -3,14 +3,35 @@
     <div class="modal-card">
         <header class="modal-card-head">
             <p class="modal-card-title" id="title"></p>
-            <button class="delete" id="close_button"></button>
+            <button class="delete" id="close-button"></button>
         </header>
         <section class="modal-card-body">
-            <input type="text" id="text_input">
+
+
+            <article class="media">
+                <figure class="media-left">
+                    <p class="image is-128x128">
+                        <img src="http://bulma.io/images/placeholders/128x128.png">
+                    </p>
+                </figure>
+                <div class="media-content">
+                    <div class="content">
+                        <p id="description">
+                            No description.
+                        </p>
+                    </div>
+                </div>
+            </article>
+
+
         </section>
         <footer class="modal-card-foot">
-            <input type="button" class="button is-primary" id="success_button" value="Add">
-            <input type="button" class="button" id="cancel_button" value="Cancel">
+            Rating&nbsp;
+            <input type="button" class="button" id="plus-button" value="+" style="width: 50px">
+            <p id="rating">
+                <strong>25&nbsp;&nbsp;</strong>
+            </p>
+            <input type="button" class="button" id="minus-button" value="-" style="width: 50px">
         </footer>
     </div>
 </div>

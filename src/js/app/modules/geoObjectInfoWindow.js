@@ -1,4 +1,4 @@
-define(['eventManager', 'text!../../../html_templates/tmpl_geoobject_info_window.html'], function (eventManager, htmlStr) {
+define(['jquery', 'eventManager', 'fb','text!../../../html_templates/tmpl_geoobject_info_window.html'], function ($, eventManager, fb, htmlStr) {
 
     return {
 
@@ -11,11 +11,9 @@ define(['eventManager', 'text!../../../html_templates/tmpl_geoobject_info_window
             this.container = $(containerSelector).get(0);
             this.infoWindow = this.createInstance(htmlStr);
             this.container.appendChild(this.infoWindow);
+            this.geoObjectId = '';
 
             this.setupHandlers();
-
-            this.infoWindow.querySelector('#success_button').disabled = true;
-
         },
 
         createInstance: function (htmlStr)
@@ -29,47 +27,53 @@ define(['eventManager', 'text!../../../html_templates/tmpl_geoobject_info_window
         setupHandlers: function ()
         {
             this.infoWindow.addEventListener('click', this.infoWindowClickHandler.bind(this));
-            this.infoWindow.addEventListener('keyup', this.infoWindowKeyUpHandler.bind(this));
         },
 
         infoWindowClickHandler: function(e)
         {
             var target = e.target;
 
-            if (target.id === 'success_button')
+            if (target.id === 'plus-button')
             {
-                eventManager.dispatch('modal_success', this.infoWindow.querySelector('#text_input').value);
+                // eventManager.dispatch('modal_success');
 
-                this.hide();
+                // this.hide();
+
+                fb.setRating(this.geoObjectId, 1);
+
+                console.log(this.geoObjectId);
             }
 
-            if (target.id === 'cancel_button' || target.id === 'close_button')
+            if (target.id === 'minus-button')
+            {
+                // eventManager.dispatch('modal_success');
+
+                // this.hide();
+
+                fb.setRating(this.geoObjectId, -1);
+
+                console.log(this.geoObjectId);
+            }
+
+            if (target.id === 'close-button')
             {
                 this.hide();
             }
         },
 
-        infoWindowKeyUpHandler: function(e)
+        show: function (title, description, id)
         {
-            var target = e.target;
-
-            if (target.id === 'text_input')
-            {
-                this.infoWindow.querySelector('#success_button').disabled = !target.value;
-            }
-        },
-
-        show: function (title)
-        {
-            this.infoWindow.querySelector('#title').innerHTML = title || 'New Event';
+            this.geoObjectId = id;
+            // $(containerSelector).get(0);
+            this.infoWindow.querySelector('#title').innerHTML = title || '';
+            this.infoWindow.querySelector('#description').innerHTML = description || 'no description.';
             this.infoWindow.classList.add('is-active');
         },
 
         hide: function ()
         {
-            this.infoWindow.querySelector('#text_input').value = '';
             this.infoWindow.classList.remove('is-active');
-            this.infoWindow.querySelector('#success_button').disabled = true;
+            // this.infoWindow.querySelector('#success_button').disabled = true;
         }
 
     };

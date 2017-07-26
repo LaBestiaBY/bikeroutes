@@ -1,4 +1,4 @@
-define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
+define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], function (ymaps, $, eventManager, infoWindow) {
 
     var GEO_OBJECTS_TYPES = {
         ROUTE: 'route',
@@ -117,7 +117,11 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
             this.myMap.geoObjects.events.add('click', function (e) {
                 console.log('Дошло до коллекции объектов карты');
                 // Получение ссылки на дочерний объект, на котором произошло событие.
-                console.log(e.get('target'));
+                console.log(e.get('target').properties.get('id'),
+                    e.get('target').properties.get('name'),
+                    e.get('target').properties.get('description'));
+
+                infoWindow.show(e.get('target').properties.get('name'), e.get('target').properties.get('description'), e.get('target').properties.get('id'));
             });
         },
 
@@ -128,9 +132,12 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
          */
         createRoute: function (object) {
             return new ymaps.Polyline(object.coordinates, {
-                    balloonContent: object.properties.description
+                    // balloonContent: object.properties.description
+                    id: object.properties.id,
+                    name: object.properties.name,
+                    description: object.properties.description
                 }, {
-                    balloonCloseButton: true,
+                    // balloonCloseButton: true,
                     strokeColor: "0000FF88",
                     strokeWidth: object.properties['stroke-width']
                 }
@@ -144,15 +151,19 @@ define(['ymaps', 'jquery', 'eventManager'], function (ymaps, $, eventManager) {
          */
         createPlacemark: function (object) {
             return new ymaps.Placemark(object.coordinates, {
-                    balloonContent: object.properties.iconContent,
-                    iconContent: object.properties.iconContent
+                    // balloonContent: object.properties.iconContent,
+                    // iconContent: object.properties.iconContent,
+
+                    id: object.properties.id,
+                    name: object.properties.name,
+                    description: object.properties.description
                 }, {
                     preset: 'islands#glyphIcon', //object.properties.preset, 'islands#glyphCircleIcon',
-                    iconGlyph: 'wrench',
+                    iconGlyph: 'wrench'
                     // iconGlyphColor: 'green', // цвет глифа
                     // iconColor: 'green', // цвет самой метки
-                    balloonCloseButton: true,
-                    hideIconOnBalloonOpen: false
+                    // balloonCloseButton: true,
+                    // hideIconOnBalloonOpen: false
                 }
             )
         },

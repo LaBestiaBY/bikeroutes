@@ -3661,7 +3661,10 @@
         ]
       ],
     "properties": {
+      "id": "mbr2745353956",
+      "name": "Главная велодорожка",
       "description": "Главная велосипедная дорожка",
+
       "stroke": "#1bad03",
       "stroke-width": "5",
       "stroke-opacity": 1
@@ -4273,7 +4276,10 @@
         ]
       ],
     "properties": {
+      "id": "sbr2756653904",
+      "name": "Велодорожка",
       "description": "Велодорожка пр. Независимости",
+
       "stroke": "#177bc9",
       "stroke-width": "5",
       "stroke-opacity": 0
@@ -5945,7 +5951,10 @@
         ]
       ],
     "properties": {
+      "id": "sbr2757553931",
+      "name": "Велодорожка",
       "description": "Велодорожка Бангалор-Восточный",
+
       "stroke": "#ed4543",
       "stroke-width": "5",
       "stroke-opacity": 0
@@ -5959,9 +5968,11 @@
         53.93012883889001
     ],
     "properties": {
-      "description": "Сезонный велосервис",
-      "marker-color": "#1e98ff",
+      "id": "sbs2752853930",
+      "name":"Сезонный велосервис",
+      "description": "Сезонный велосервис на колёсах возле моста по ул. Орловской.",
 
+      "marker-color": "#1e98ff",
       "preset": "islands#yellowStretchyIcon"
     }
   },
@@ -5969,13 +5980,15 @@
     "type": "placemark",
     "kind": "season-bike-service",
     "coordinates": [
-      27.54613187718493,
-      53.91824749634943
+        27.54613187718493,
+        53.91824749634943
     ],
     "properties": {
-      "description": "Сезонный велосервис",
-      "marker-color": "#1e98ff",
+      "id": "sbs2754653918",
+      "name": "Сезонный велосервис",
+      "description": "Сезонный велосервис возле сезонного кафе рядом с мостом по просп. Машерова.",
 
+      "marker-color": "#1e98ff",
       "preset": "islands#yellowStretchyIcon"
     }
   },
@@ -5983,13 +5996,15 @@
     "type": "placemark",
     "kind": "season-bike-service",
     "coordinates": [
-      27.524732808501174,
-      53.934066929948315
+        27.524732808501174,
+        53.934066929948315
     ],
     "properties": {
-      "description": "Сезонный велосервис",
-      "marker-color": "#1e98ff",
+      "id": "sbs2752453934",
+      "name": "Сезонный велосервис",
+      "description": "Сезонный велосервис на реке Свислочь возле малого острова.",
 
+      "marker-color": "#1e98ff",
       "preset": "islands#yellowStretchyIcon"
     }
   },
@@ -5997,13 +6012,15 @@
     "type": "placemark",
     "kind": "bike-service",
     "coordinates": [
-      27.576869587333135,
-      53.921639713562904
+        27.576869587333135,
+        53.921639713562904
     ],
     "properties": {
-      "description": "Велосервис",
-      "marker-color": "#1e98ff",
+      "id": "bs2757653921",
+      "name": "Велосервис",
+      "description": "Велосервис и веломагазин 'DragonBike' ул. Куйбышева, 69",
 
+      "marker-color": "#1e98ff",
       "preset": "islands#yellowStretchyIcon"
     }
   },
@@ -6011,13 +6028,15 @@
     "type": "placemark",
     "kind": "bike-service",
     "coordinates": [
-      27.576869587332983,
-      53.91076948095124
+        27.576869587332983,
+        53.91076948095124
     ],
     "properties": {
-      "description": "Велосервис",
-      "marker-color": "#1e98ff",
+      "id": "bs2757653910",
+      "name": "Велосервис",
+      "description": "Велосервис и веломагазин 'Педали', просп. Машерова, 1",
 
+      "marker-color": "#1e98ff",
       "preset": "islands#yellowStretchyIcon"
     }
   }

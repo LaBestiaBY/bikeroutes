@@ -81,7 +81,54 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
         setUserIsAuth: function (user) {
             this.userIsAuth = user;
             eventManager.dispatch('user_state_change');
+        },
+
+        /**
+         *
+         * @param id
+         * @param value
+         */
+        setRating: function (id, value) {
+            firebase.database().ref('users/' + this.getUserIsAuth().uid + '/ratings/' + id).set(value);
+
+            //firebase.database().ref('geoobjects/' + id + '/rating/').set(value);
+
+            console.log('rating = ' + this.getRating(id));
+
+            // this.toggleStar(firebase.database().ref('geoobjects/' + id + '/rating/'), this.getUserIsAuth().uid);
+
+        },
+
+        getRating: function (id) {
+
+            var rating = 0;
+            firebase.database().ref('geoobjects/' + id + '/rating').once('value').then(function(snapshot) {
+                var rating = snapshot.val();
+                // ...
+                console.log(snapshot.val());
+            });
+            return rating;
         }
+
+        // toggleStar: function (postRef, uid) {
+        //     postRef.transaction(function(post) {
+        //         console.log(post);
+        //         if (post) {
+        //             if (post.stars && post.stars[uid]) {
+        //                 post.starCount--;
+        //                 post.stars[uid] = null;
+        //             } else {
+        //                 post.starCount++;
+        //                 if (!post.stars) {
+        //                     post.stars = {};
+        //                 }
+        //                 post.stars[uid] = true;
+        //             }
+        //         }
+        //         return post;
+        //     });
+        // }
+
 
         /**
          *
