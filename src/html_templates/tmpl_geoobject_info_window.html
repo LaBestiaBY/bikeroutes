@@ -27,11 +27,18 @@
         </section>
         <footer class="modal-card-foot">
             Rating&nbsp;
-            <input type="button" class="button" id="plus-button" value="+" style="width: 50px">
-            <p id="rating">
+            <% if (user) {%>
+                <input type="button" class="button" id="plus-button" value="+" style="width: 50px">
+            <% } %>
+            <p>
                 <!--<strong>25&nbsp;&nbsp;</strong>-->
+                <span class="tag is-warning" id="rating">
+                </span>
+                &nbsp;
             </p>
-            <input type="button" class="button" id="minus-button" value="-" style="width: 50px">
+            <% if (user) {%>
+                <input type="button" class="button" id="minus-button" value="-" style="width: 50px">
+            <% } %>
         </footer>
     </div>
 </div>

@@ -25,18 +25,11 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
                         eventManager.dispatch('ratings_changed', snapshot.val());
                     });
 
-                    // var ref = firebase.database().ref('users/' + user.uid + '/tasks/');
-                    // ref.on('value', function(snapshot)
-                    // {
-                    //     eventManager.dispatch('value_changed', snapshot.val());
-                    // });
-
-                    // console.log('onAuth true', user);
+                    var userRatingsRef = firebase.database().ref('users/' + user.uid + '/ratings/');
+                    userRatingsRef.on('value', function (snapshot) {
+                        eventManager.dispatch('user_ratings_changed', snapshot.val());
+                    });
                 }
-                else {
-                    // console.log('onAuth false');
-                }
-
                 this.setUserIsAuth(user);
 
             }.bind(this));
@@ -110,6 +103,16 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
             });
         },
 
+        /**
+         *
+         */
+        getUserRatings: function () {
+            if (this.getUserIsAuth()) {
+                firebase.database().ref('users/' + this.getUserIsAuth().uid + '/ratings/').once('value').then(function(snapshot) {
+                    eventManager.dispatch('user_ratings_received', snapshot.val());
+                });
+            }
+        },
 
         /**
          *

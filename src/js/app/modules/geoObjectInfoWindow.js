@@ -1,5 +1,5 @@
-define(['jquery', 'eventManager', 'fb', 'modules/ratingManager', 'text!../../../html_templates/tmpl_geoobject_info_window.html'],
-    function ($, eventManager, fb, ratingManager, htmlStr) {
+define(['underscore', 'jquery', 'eventManager', 'fb', 'modules/ratingManager', 'text!../../../html_templates/tmpl_geoobject_info_window.html'],
+    function (_, $, eventManager, fb, ratingManager, htmlStr) {
 
         return {
 
@@ -9,8 +9,9 @@ define(['jquery', 'eventManager', 'fb', 'modules/ratingManager', 'text!../../../
              */
             init: function (containerSelector) {
                 this.container = $(containerSelector).get(0);
-                this.infoWindow = this.createInstance(htmlStr);
-                this.container.appendChild(this.infoWindow);
+                this.tmpl = _.template(htmlStr);
+                this.render();
+
                 this.geoObjectId = '';
 
                 this.setupHandlers();
@@ -18,14 +19,10 @@ define(['jquery', 'eventManager', 'fb', 'modules/ratingManager', 'text!../../../
 
             /**
              *
-             * @param htmlStr
-             * @returns {Node}
              */
-            createInstance: function (htmlStr) {
-                var tempEl = document.createElement('div');
-                tempEl.innerHTML = htmlStr;
-
-                return tempEl.firstChild;
+            render: function () {
+                this.container.innerHTML = '';
+                this.container.innerHTML = this.tmpl({user: fb.getUserIsAuth()});
             },
 
             /**
@@ -33,9 +30,13 @@ define(['jquery', 'eventManager', 'fb', 'modules/ratingManager', 'text!../../../
              */
             setupHandlers: function () {
                 this.ratingsUpdatedHandler = this.ratingsUpdated.bind(this);
+                this.userRatingsUpdatedHandler = this.userRatingsUpdated.bind(this);
+                this.userStateChangeHandler = this.userStateChange.bind(this);
 
-                this.infoWindow.addEventListener('click', this.infoWindowClickHandler.bind(this));
+                this.container.addEventListener('click', this.infoWindowClickHandler.bind(this));
                 eventManager.subscribe('ratings_updated', this.ratingsUpdatedHandler);
+                eventManager.subscribe('user_ratings_updated', this.userRatingsUpdatedHandler);
+                eventManager.subscribe('user_state_change', this.userStateChangeHandler);
             },
 
             /**
@@ -69,21 +70,44 @@ define(['jquery', 'eventManager', 'fb', 'modules/ratingManager', 'text!../../../
              * @param id
              */
             show: function (title, description, id) {
+                // console.log('IW show', this.infoWindow.classList);
+
                 this.geoObjectId = id;
                 // $(containerSelector).get(0);
-                this.infoWindow.querySelector('#title').innerHTML = title || '';
-                this.infoWindow.querySelector('#description').innerHTML = description || 'no description.';
-                this.infoWindow.querySelector('#rating').innerHTML = ratingManager.getRating(id) || '';
-                this.infoWindow.classList.add('is-active');
+                this.container.querySelector('#title').innerHTML = title || '';
+                this.container.querySelector('#description').innerHTML = description || 'no description.';
+                this.container.querySelector('#rating').innerHTML = ratingManager.getRating(id) || '0';
+                this.container.querySelector('#geoobject_info_window').classList.add('is-active');
+                this.toggleRatingButtons('#plus-button', '#minus-button', ratingManager.getUserRating(this.geoObjectId));
             },
 
             /**
              *
              */
             hide: function () {
-                this.infoWindow.classList.remove('is-active');
-                // this.infoWindow.querySelector('#success_button').disabled = true;
+                this.container.querySelector('#geoobject_info_window').classList.remove('is-active');
                 this.geoObjectId = '';
+            },
+
+            /**
+             *
+             * @param selector1
+             * @param selector2
+             * @param value
+             */
+            toggleRatingButtons: function (selector1, selector2, value) {
+                if (value === 1) {
+                    this.container.querySelector(selector1).classList.add('is-success');
+                    this.container.querySelector(selector1).disabled = true;
+                    this.container.querySelector(selector2).classList.remove('is-danger');
+                    this.container.querySelector(selector2).disabled = false;
+                }
+                if (value === -1) {
+                    this.container.querySelector(selector1).classList.remove('is-success');
+                    this.container.querySelector(selector1).disabled = false;
+                    this.container.querySelector(selector2).classList.add('is-danger');
+                    this.container.querySelector(selector2).disabled = true;
+                }
             },
 
             /**
@@ -92,8 +116,23 @@ define(['jquery', 'eventManager', 'fb', 'modules/ratingManager', 'text!../../../
             ratingsUpdated: function () {
                 if (this.geoObjectId)
                 {
-                    this.infoWindow.querySelector('#rating').innerHTML = ratingManager.getRating(this.geoObjectId) || '';
+                    this.container.querySelector('#rating').innerHTML = ratingManager.getRating(this.geoObjectId) || '0';
                 }
+            },
+
+            /**
+             *
+             */
+            userRatingsUpdated: function () {
+                this.toggleRatingButtons('#plus-button', '#minus-button', ratingManager.getUserRating(this.geoObjectId));
+            },
+
+            /**
+             *
+             */
+            userStateChange: function () {
+                console.log('IW userStateChange');
+                this.render();
             }
 
         };
