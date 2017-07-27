@@ -8,6 +8,7 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
         init: function () {
             firebase.initializeApp(module.config());
             this.userIsAuth = firebase.auth().currentUser || null;
+            // firebase.database().ref('geoobjects/temp').set(0);
             this.setupEvents();
         },
 
@@ -18,12 +19,14 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
 
             firebase.auth().onAuthStateChanged(function (user) {
 
+                var geoobjectsRef = firebase.database().ref('geoobjects/');
+                geoobjectsRef.on('value', function (snapshot) {
+                    eventManager.dispatch('ratings_changed', snapshot.val());
+                });
+
                 if (user) {
 
-                    var geoobjectsRef = firebase.database().ref('geoobjects/');
-                    geoobjectsRef.on('value', function (snapshot) {
-                        eventManager.dispatch('ratings_changed', snapshot.val());
-                    });
+                    firebase.database().ref('users/' + user.uid + '/ratings/temp').set(0);
 
                     var userRatingsRef = firebase.database().ref('users/' + user.uid + '/ratings/');
                     userRatingsRef.on('value', function (snapshot) {
@@ -87,11 +90,16 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
          *
          * @param id
          * @param value
+         * @param previousValue
          */
-        setRating: function (id, value) {
+        setRating: function (id, value, previousValue) {
             firebase.database().ref('users/' + this.getUserIsAuth().uid + '/ratings/' + id).set(value);
 
-            this.changeRating(firebase.database().ref('geoobjects/' + id + '/rating/'), value);
+
+            previousValue = !previousValue ? 0 : previousValue;
+
+            console.log(value, previousValue, value - previousValue);
+            this.changeRating(firebase.database().ref('geoobjects/' + id + '/rating/'), value - previousValue);
         },
 
         /**

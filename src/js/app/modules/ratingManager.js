@@ -39,7 +39,7 @@ define(['eventManager', 'fb'], function (eventManager, fb) {
          * @param value
          */
         setRating: function (id, value) {
-            fb.setRating(id, value);
+            fb.setRating(id, value, this.getUserRating(id));
         },
 
         /**
@@ -73,9 +73,9 @@ define(['eventManager', 'fb'], function (eventManager, fb) {
          * @param data
          */
         userRatingsRecieved: function (data) {
-            this.userRatings = data;
+            this.userRatings = data ? data : {};
 
-            console.log('RM userRatingsReceived', data);
+            console.log('RM userRatingsReceived', this.userRatings);
         },
 
         /**

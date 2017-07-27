@@ -96,17 +96,28 @@ define(['underscore', 'jquery', 'eventManager', 'fb', 'modules/ratingManager', '
              * @param value
              */
             toggleRatingButtons: function (selector1, selector2, value) {
-                if (value === 1) {
-                    this.container.querySelector(selector1).classList.add('is-success');
-                    this.container.querySelector(selector1).disabled = true;
-                    this.container.querySelector(selector2).classList.remove('is-danger');
-                    this.container.querySelector(selector2).disabled = false;
-                }
-                if (value === -1) {
-                    this.container.querySelector(selector1).classList.remove('is-success');
-                    this.container.querySelector(selector1).disabled = false;
-                    this.container.querySelector(selector2).classList.add('is-danger');
-                    this.container.querySelector(selector2).disabled = true;
+
+                console.log('toggleRatingButtons', value);
+
+                var el1 = this.container.querySelector(selector1);
+                var el2 = this.container.querySelector(selector2);
+                if (el1 && el2) {
+                    if (value === 1) {
+                        el1.classList.add('is-success');
+                        el1.disabled = true;
+                        el2.classList.remove('is-danger');
+                        el2.disabled = false;
+                    } else if (value === -1) {
+                        el1.classList.remove('is-success');
+                        el1.disabled = false;
+                        el2.classList.add('is-danger');
+                        el2.disabled = true;
+                    } else {
+                        el1.classList.remove('is-success');
+                        el1.disabled = false;
+                        el2.classList.remove('is-danger');
+                        el2.disabled = false;
+                    }
                 }
             },
 
