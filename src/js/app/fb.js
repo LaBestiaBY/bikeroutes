@@ -1,4 +1,5 @@
 define(['firebase', 'module', 'eventManager'], function (firebase, module, eventManager) {
+
     return {
 
         /**
@@ -18,6 +19,12 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
             firebase.auth().onAuthStateChanged(function (user) {
 
                 if (user) {
+
+                    var geoobjectsRef = firebase.database().ref('geoobjects/');
+                    geoobjectsRef.on('value', function (snapshot) {
+                        eventManager.dispatch('ratings_changed', snapshot.val());
+                    });
+
                     // var ref = firebase.database().ref('users/' + user.uid + '/tasks/');
                     // ref.on('value', function(snapshot)
                     // {
@@ -91,50 +98,28 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
         setRating: function (id, value) {
             firebase.database().ref('users/' + this.getUserIsAuth().uid + '/ratings/' + id).set(value);
 
-            //firebase.database().ref('geoobjects/' + id + '/rating/').set(value);
-
-            console.log('rating = ' + this.getRating(id));
-
-            // this.toggleStar(firebase.database().ref('geoobjects/' + id + '/rating/'), this.getUserIsAuth().uid);
-
+            this.changeRating(firebase.database().ref('geoobjects/' + id + '/rating/'), value);
         },
-
-        getRating: function (id) {
-
-            var rating = 0;
-            firebase.database().ref('geoobjects/' + id + '/rating').once('value').then(function(snapshot) {
-                var rating = snapshot.val();
-                // ...
-                console.log(snapshot.val());
-            });
-            return rating;
-        }
-
-        // toggleStar: function (postRef, uid) {
-        //     postRef.transaction(function(post) {
-        //         console.log(post);
-        //         if (post) {
-        //             if (post.stars && post.stars[uid]) {
-        //                 post.starCount--;
-        //                 post.stars[uid] = null;
-        //             } else {
-        //                 post.starCount++;
-        //                 if (!post.stars) {
-        //                     post.stars = {};
-        //                 }
-        //                 post.stars[uid] = true;
-        //             }
-        //         }
-        //         return post;
-        //     });
-        // }
-
 
         /**
          *
          */
-        // saveTask: function (id, data) {
-        //     firebase.database().ref('users/' + this.getUserIsAuth().uid + '/tasks/' + id).set(data);
-        // }
+        getRatings: function () {
+            firebase.database().ref('geoobjects/').once('value').then(function(snapshot) {
+                eventManager.dispatch('ratings_received', snapshot.val());
+            });
+        },
+
+
+        /**
+         *
+         * @param ratingRef
+         * @param value
+         */
+        changeRating: function (ratingRef, value) {
+            ratingRef.transaction(function(currentRating) {
+                return currentRating + value;
+            });
+        }
     }
 });
