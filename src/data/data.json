@@ -5962,7 +5962,7 @@
   },
   {
     "type": "placemark",
-    "kind": "season-bike-service",
+    "kind": "bike-service",
     "coordinates": [
         27.52883431124637,
         53.93012883889001
@@ -5978,7 +5978,7 @@
   },
   {
     "type": "placemark",
-    "kind": "season-bike-service",
+    "kind": "bike-service",
     "coordinates": [
         27.54613187718493,
         53.91824749634943
@@ -5994,7 +5994,7 @@
   },
   {
     "type": "placemark",
-    "kind": "season-bike-service",
+    "kind": "bike-service",
     "coordinates": [
         27.524732808501174,
         53.934066929948315

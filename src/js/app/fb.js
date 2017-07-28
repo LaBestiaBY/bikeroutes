@@ -32,11 +32,15 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
                     userRatingsRef.on('value', function (snapshot) {
                         eventManager.dispatch('user_ratings_changed', snapshot.val());
                     });
+
+                    var userSettingsRef = firebase.database().ref('users/' + user.uid + '/settings/');
+                    userSettingsRef.on('value', function (snapshot) {
+                        eventManager.dispatch('user_settings_changed', snapshot.val());
+                    });
                 }
                 this.setUserIsAuth(user);
 
             }.bind(this));
-
         },
 
         /**
@@ -131,6 +135,34 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
             ratingRef.transaction(function(currentRating) {
                 return currentRating + value;
             });
+        },
+
+        /**
+         *
+         * @param name
+         * @param value
+         */
+        setUserSettings: function (name, value) {
+            if (this.userIsAuth)
+            {
+                console.log('fb', name, value);
+
+                firebase.database().ref('users/' + this.getUserIsAuth().uid + '/settings/' + name).set(value);
+            }
+        },
+
+        /**
+         *
+         */
+        getUserSettings: function () {
+
+            console.log('FB getUserSettings');
+
+            if (this.getUserIsAuth()) {
+                firebase.database().ref('users/' + this.getUserIsAuth().uid + '/settings/').once('value').then(function(snapshot) {
+                    eventManager.dispatch('user_settings_received', snapshot.val());
+                });
+            }
         }
     }
 });
