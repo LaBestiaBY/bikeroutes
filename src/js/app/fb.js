@@ -102,7 +102,6 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
 
             previousValue = !previousValue ? 0 : previousValue;
 
-            console.log(value, previousValue, value - previousValue);
             this.changeRating(firebase.database().ref('geoobjects/' + id + '/rating/'), value - previousValue);
         },
 
@@ -145,8 +144,6 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
         setUserSettings: function (name, value) {
             if (this.userIsAuth)
             {
-                console.log('fb', name, value);
-
                 firebase.database().ref('users/' + this.getUserIsAuth().uid + '/settings/' + name).set(value);
             }
         },
@@ -155,9 +152,6 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
          *
          */
         getUserSettings: function () {
-
-            console.log('FB getUserSettings');
-
             if (this.getUserIsAuth()) {
                 firebase.database().ref('users/' + this.getUserIsAuth().uid + '/settings/').once('value').then(function(snapshot) {
                     eventManager.dispatch('user_settings_received', snapshot.val());

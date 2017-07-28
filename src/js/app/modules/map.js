@@ -28,13 +28,11 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
             this.mapReadyHandler = this.mapReady.bind(this);
             this.dataLoadedHandler = this.dataLoaded.bind(this);
             this.menuChangeHandler = this.menuChange.bind(this);
-            this.userStateChangeHandler = this.userStateChange.bind(this);
             this.userSettingsSetHandler = this.userSettingsSet.bind(this);
 
             ymaps.ready(this.mapReadyHandler);
             eventManager.subscribe('data_loaded', this.dataLoadedHandler);
             eventManager.subscribe('menu_changed', this.menuChangeHandler);
-            eventManager.subscribe('user_state_change', this.userStateChangeHandler);
             eventManager.subscribe('user_settings_set', this.userSettingsSetHandler);
         },
 
@@ -47,6 +45,17 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
                 zoom: 11,
                 controls: []
             });
+
+            this.myMap.setBounds([
+                [
+                    27.453942944772024,
+                    53.95613677591413
+                ],
+                [
+                    27.600544533806133,
+                    53.842840768069784
+                ]]);
+
 
             eventManager.dispatch('map_rendered');
 
@@ -92,24 +101,13 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
         renderGeoObjects: function (geoObjects) {
             geoObjects.map(function (geoObj) {
                 if (this.displaySettings[geoObj.kind]) {
-                    this.myMap.geoObjects.add(geoObj.instance);
+                    if (this.myMap.geoObjects.indexOf(geoObj.instance) === -1) {
+                        this.myMap.geoObjects.add(geoObj.instance);
+                    }
                 } else {
                     this.myMap.geoObjects.remove(geoObj.instance);
                 }
-
-                // this.myMap.geoObjects.add(geoObj.instance);
-                // console.log();
             }.bind(this));
-
-            // this.displaySettings.map(function (item) {
-            //     if (this.displaySettings[item]) {
-            //
-            //     }
-            // }.bind(this));
-
-            this.myMap.setBounds(this.myMap.geoObjects.getBounds());
-
-            // console.log('geoObjects rendered');
             eventManager.dispatch('geoobjects_rendered');
         },
 
@@ -125,7 +123,6 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
                         instance: this.createRoute(object)
                     });
                 }
-
                 if (object.type === GEO_OBJECTS_TYPES.PLACEMARK) {
                     this.geoObjects.push({
                         kind: object.kind,
@@ -137,17 +134,10 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
             this.geoobjectsCreated = true;
 
             if (this.displaySettingsLoaded) {
-                console.log('render geo objects by creating', this.displaySettings);
                 this.renderGeoObjects(this.geoObjects);
             }
 
             this.myMap.geoObjects.events.add('click', function (e) {
-                // console.log('Дошло до коллекции объектов карты');
-                // Получение ссылки на дочерний объект, на котором произошло событие.
-                // console.log(e.get('target').properties.get('id'),
-                //     e.get('target').properties.get('name'),
-                //     e.get('target').properties.get('description'));
-
                 infoWindow.show(e.get('target').properties.get('name'), e.get('target').properties.get('description'), e.get('target').properties.get('id'));
             });
         },
@@ -200,18 +190,9 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
          * @param kind
          */
         showGeoObjects: function (kind) {
-            // console.log('showGeoObject', kind);
-            // console.log(this.geoObjects);
-            // this.myMap.geoObjects.removeAll();
-
             this.geoObjects.map(function (geoObject) {
                 if (geoObject.kind === kind) {
-                    // if (this.myMap.geoObjects.indexOf(geoObject.instance) === -1)
-                    // {
-
                     this.myMap.geoObjects.add(geoObject.instance);
-                    // console.log('added ' + geoObject.kind + ' to map');
-                    // }
                 }
             }.bind(this));
         },
@@ -221,13 +202,9 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
          * @param kind
          */
         hideGeoObjects: function (kind) {
-            // console.log('hideGeoObjects', kind);
             this.geoObjects.map(function (geoObject) {
                 if (geoObject.kind === kind) {
-                    if (this.myMap.geoObjects.indexOf(geoObject.instance) !== -1) {
-                        this.myMap.geoObjects.remove(geoObject.instance);
-                        // console.log('removed ' + geoObject.kind + ' from map');
-                    }
+                    this.myMap.geoObjects.remove(geoObject.instance);
                 }
             }.bind(this));
         },
@@ -274,22 +251,10 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
         menuChange: function (data) {
 
             if (data.checked) {
-                // console.log(data.kind + " is visible now");
                 this.showGeoObjects(data.kind);
             } else {
-                // console.log(data.kind + " is invisible now");
                 this.hideGeoObjects(data.kind);
             }
-        },
-
-        /**
-         *
-         */
-        userStateChange: function () {
-            // if (this.myMap)
-            // {
-            //     this.renderGeoObjects(this.geoObjects);
-            // }
         },
 
         /**
@@ -301,7 +266,6 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
             this.displaySettingsLoaded = true;
 
             if (this.geoobjectsCreated) {
-                console.log('render geo objects by settings', this.displaySettings);
                 this.renderGeoObjects(this.geoObjects);
             }
         }

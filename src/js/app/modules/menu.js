@@ -59,8 +59,6 @@ define(['underscore', 'jquery', 'text!../../../html_templates/tmpl_main_menu.htm
              * @param data
              */
             userSettingsSet: function (data) {
-                console.log('MENU userSettingsLoaded');
-
                 for (item in data) {
                     this.container.find('.' + item).prop('checked', data[item]);
                 }

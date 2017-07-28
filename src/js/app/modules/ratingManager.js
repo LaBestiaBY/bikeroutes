@@ -74,8 +74,6 @@ define(['eventManager', 'fb'], function (eventManager, fb) {
          */
         userRatingsRecieved: function (data) {
             this.userRatings = data ? data : {};
-
-            // console.log('RM userRatingsReceived', this.userRatings);
         },
 
         /**
@@ -94,14 +92,12 @@ define(['eventManager', 'fb'], function (eventManager, fb) {
         userRatingsChanged: function (data) {
             this.userRatings = data;
             eventManager.dispatch('user_ratings_updated');
-            // console.log('RM userRatingsChanged', data);
         },
 
         /**
          *
          */
         userStateChange: function () {
-            // console.log('RM userStateChange');
             fb.getUserRatings();
         }
 

@@ -48,14 +48,10 @@ define(['underscore', 'jquery', 'eventManager', 'fb', 'modules/ratingManager', '
 
                 if (target.attr('id') === 'plus-button') {
                     ratingManager.setRating(this.geoObjectId, 1);
-
-                    // console.log('from window, id = ' + this.geoObjectId);
                 }
 
                 if (target.attr('id') === 'minus-button') {
                     ratingManager.setRating(this.geoObjectId, -1);
-
-                    // console.log('from window, id = ' + this.geoObjectId);
                 }
 
                 if (target.attr('id') === 'close-button') {
@@ -70,10 +66,7 @@ define(['underscore', 'jquery', 'eventManager', 'fb', 'modules/ratingManager', '
              * @param id
              */
             show: function (title, description, id) {
-                // console.log('IW show', this.infoWindow.classList);
-
                 this.geoObjectId = id;
-                // $(containerSelector).get(0);
                 this.container.find('#title').html(title || '');
                 this.container.find('#description').html(description || 'no description.');
                 this.container.find('#rating').html(ratingManager.getRating(id) || '0');
@@ -96,9 +89,6 @@ define(['underscore', 'jquery', 'eventManager', 'fb', 'modules/ratingManager', '
              * @param value
              */
             toggleRatingButtons: function (selector1, selector2, value) {
-
-                // console.log('toggleRatingButtons', value);
-
                 var el1 = this.container.find(selector1);
                 var el2 = this.container.find(selector2);
                 if (el1 && el2) {
@@ -142,7 +132,6 @@ define(['underscore', 'jquery', 'eventManager', 'fb', 'modules/ratingManager', '
              *
              */
             userStateChange: function () {
-                // console.log('IW userStateChange');
                 this.render();
             }
 

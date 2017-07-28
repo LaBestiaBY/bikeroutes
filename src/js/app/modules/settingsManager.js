@@ -64,7 +64,6 @@ define(['eventManager', 'fb'], function (eventManager, fb) {
             for (item in data) {
                 this.userSettings[item] = data[item];
             }
-            console.log('SM userSettingsReceived', this.userSettings);
             eventManager.dispatch('user_settings_set', this.userSettings);
         },
 
@@ -77,7 +76,6 @@ define(['eventManager', 'fb'], function (eventManager, fb) {
                 this.userSettings[item] = data[item];
             }
             eventManager.dispatch('user_settings_set', this.userSettings);
-            // console.log('SM userSettingsChanged', data);
         },
 
         /**
