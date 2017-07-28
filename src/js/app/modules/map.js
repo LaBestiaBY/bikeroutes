@@ -149,12 +149,10 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
          */
         createRoute: function (object) {
             return new ymaps.Polyline(object.coordinates, {
-                    // balloonContent: object.properties.description
                     id: object.properties.id,
                     name: object.properties.name,
                     description: object.properties.description
                 }, {
-                    // balloonCloseButton: true,
                     strokeColor: "0000FF88",
                     strokeWidth: object.properties['stroke-width']
                 }
@@ -168,8 +166,6 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
          */
         createPlacemark: function (object) {
             return new ymaps.Placemark(object.coordinates, {
-                    // balloonContent: object.properties.iconContent,
-                    // iconContent: object.properties.iconContent,
 
                     id: object.properties.id,
                     name: object.properties.name,
@@ -215,18 +211,18 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
         mapReady: function () {
             this.render();
 
-            /*var myPlacemark1 = new ymaps.Placemark([27.54613187718493,
+            var myPlacemark1 = new ymaps.Placemark([27.54613187718493,
              53.91824749634943], {}, {
              iconLayout: 'default#image',
-             iconImageClipRect: [[0,0], [30, 35]],
-             iconImageHref: 'img/markers.png',
-             iconImageSize: [30, 35],
-             iconImageOffset: [-15, -35]
+             iconImageClipRect: [[3,58], [30, 98]],
+             iconImageHref: 'img/markers_sprite.png',
+             iconImageSize: [27, 40],
+             iconImageOffset: [-14, -40]
              });
 
              this.myMap.geoObjects.add(myPlacemark1);
 
-             var myPlacemark2 = new ymaps.Placemark([27.55613187718493,
+             /*var myPlacemark2 = new ymaps.Placemark([27.55613187718493,
              53.91824749634943], {}, {
              iconLayout: 'default#image',
              iconImageClipRect: [[30,0], [54, 28]],
