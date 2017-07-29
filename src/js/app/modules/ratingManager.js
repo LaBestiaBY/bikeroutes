@@ -1,5 +1,5 @@
 define(['eventManager', 'fb'], function (eventManager, fb) {
-    
+
     return {
 
         /**
@@ -48,7 +48,11 @@ define(['eventManager', 'fb'], function (eventManager, fb) {
          * @returns {*}
          */
         getRating: function (id) {
-            return this.ratings[id].rating;
+            if (!this.ratings[id]) {
+                return 0;
+            } else {
+                return this.ratings[id].rating;
+            }
         },
 
         /**
@@ -102,5 +106,5 @@ define(['eventManager', 'fb'], function (eventManager, fb) {
         }
 
     }
-    
+
 });

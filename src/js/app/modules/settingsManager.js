@@ -9,7 +9,10 @@ define(['eventManager', 'fb'], function (eventManager, fb) {
         defaultSettings: {
             'main-bike-route': true,
             'simple-bike-route': true,
-            'bike-service': true
+            'bike-service': true,
+            'food': true,
+            'wc': true,
+            'bike-parking':true
         },
 
         /**
@@ -20,10 +23,7 @@ define(['eventManager', 'fb'], function (eventManager, fb) {
             for (item in this.defaultSettings) {
                 this.userSettings[item] = this.defaultSettings[item];
             }
-
-            // this.userRatings = this.defaultSettings;
             this.setupHandlers();
-            // fb.getUserSettings();
         },
 
         /**

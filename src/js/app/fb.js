@@ -8,7 +8,6 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
         init: function () {
             firebase.initializeApp(module.config());
             this.userIsAuth = firebase.auth().currentUser || null;
-            // firebase.database().ref('geoobjects/temp').set(0);
             this.setupEvents();
         },
 
@@ -52,7 +51,6 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
 
             firebase.auth().signInWithPopup(provider)
                 .then(function (result) {
-                    // this.setUserIsAuth(result.user);
                 }.bind(this))
                 .catch(function (error) {
                     var errorMessage = error.message;
@@ -66,7 +64,6 @@ define(['firebase', 'module', 'eventManager'], function (firebase, module, event
         signOut: function () {
             firebase.auth().signOut()
                 .then(function () {
-                    // this.setUserIsAuth(null);
                 }.bind(this))
                 .catch(function (error) {
                     console.log('sign out error: ' + error);

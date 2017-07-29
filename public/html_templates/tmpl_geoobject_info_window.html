@@ -1,0 +1,44 @@
+<div class="modal" id="geoobject_info_window">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title" id="title"></p>
+            <button class="delete" id="close-button"></button>
+        </header>
+        <section class="modal-card-body">
+
+
+            <article class="media">
+                <figure class="media-left">
+                    <p class="image is-128x128">
+                        <img src="http://bulma.io/images/placeholders/128x128.png">
+                    </p>
+                </figure>
+                <div class="media-content">
+                    <div class="content">
+                        <p id="description">
+                            No description.
+                        </p>
+                    </div>
+                </div>
+            </article>
+
+
+        </section>
+        <footer class="modal-card-foot">
+            Rating&nbsp;
+            <% if (user) {%>
+                <input type="button" class="button" id="plus-button" value="+" style="width: 50px">
+            <% } %>
+            <p>
+                <!--<strong>25&nbsp;&nbsp;</strong>-->
+                <span class="tag is-warning" id="rating">
+                </span>
+                &nbsp;
+            </p>
+            <% if (user) {%>
+                <input type="button" class="button" id="minus-button" value="-" style="width: 50px">
+            <% } %>
+        </footer>
+    </div>
+</div>

@@ -1,8 +1,48 @@
-define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], function (ymaps, $, eventManager, infoWindow) {
+define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow', 'modules/ratingManager'], function (ymaps, $, eventManager, infoWindow, ratingManager) {
 
     var GEO_OBJECTS_TYPES = {
         ROUTE: 'route',
         PLACEMARK: 'placemark'
+    };
+
+    var MARKER = {
+        SMALL: {
+            RED: [[4,102], [24, 132]],
+            BLUE: [[26,102], [46, 132]],
+            GREEN: [[48,102], [68, 132]],
+            YELLOW: [[70,102], [90, 132]],
+            PURPLE: [[92,102], [112, 132]],
+            SIZE: [20, 30],
+            OFFSET: [-10, -30]
+        },
+        MEDIUM: {
+            RED: [[3,58], [30, 98]],
+            BLUE: [[33,58], [59, 98]],
+            GREEN: [[62,58], [88, 98]],
+            YELLOW: [[91,58], [117, 98]],
+            PURPLE: [[120,58], [146, 98]],
+            SIZE: [27, 40],
+            OFFSET: [-14, -40]
+        },
+        LARGE: {
+            RED: [[0,0], [36, 55]],
+            BLUE: [[40,0], [76, 55]],
+            GREEN: [[119,0], [156, 55]],
+            YELLOW: [[119,0], [156, 55]],
+            PURPLE: [[159,0], [195, 55]],
+            SIZE: [36, 55],
+            OFFSET: [-18, -55]
+        }
+    };
+
+    var ROUTE = {
+        MEDIUM: {
+            SIZE: 0
+        },
+        LARGE: {
+            SIZE: 1
+        }
+
     };
 
     return {
@@ -29,11 +69,13 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
             this.dataLoadedHandler = this.dataLoaded.bind(this);
             this.menuChangeHandler = this.menuChange.bind(this);
             this.userSettingsSetHandler = this.userSettingsSet.bind(this);
+            this.ratingsUpdatedHandler = this.ratingsUpdated.bind(this);
 
             ymaps.ready(this.mapReadyHandler);
             eventManager.subscribe('data_loaded', this.dataLoadedHandler);
             eventManager.subscribe('menu_changed', this.menuChangeHandler);
             eventManager.subscribe('user_settings_set', this.userSettingsSetHandler);
+            eventManager.subscribe('ratings_updated', this.ratingsUpdatedHandler);
         },
 
         /**
@@ -58,40 +100,6 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
 
 
             eventManager.dispatch('map_rendered');
-
-            /*
-
-             велосипед
-             fa-bicycle
-
-             компас (ваше местоположение)
-             fa-compass
-
-             еда
-             fa-cutlery
-
-             настройки
-             fa-cogs
-
-             магазин
-             fa-shopping-cart
-
-             иконка выпадающего списка
-             fa-sort-desc
-
-             лайк
-             fa-thumbs-o-up
-
-             разводной ключ
-             fa-wrench
-
-             кафе
-             fa-coffee
-
-
-
-             */
-
         },
 
         /**
@@ -102,6 +110,15 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
             geoObjects.map(function (geoObj) {
                 if (this.displaySettings[geoObj.kind]) {
                     if (this.myMap.geoObjects.indexOf(geoObj.instance) === -1) {
+                        if (ratingManager.getRating(geoObj.instance.properties.get('id')) > 50) {
+                            geoObj.instance = geoObj.instanceLarge;
+                        }
+                        if (ratingManager.getRating(geoObj.instance.properties.get('id')) <= 50 && ratingManager.getRating(geoObj.instance.properties.get('id')) >= 0) {
+                            geoObj.instance = geoObj.instanceMedium;
+                        }
+                        if (ratingManager.getRating(geoObj.instance.properties.get('id')) < 0) {
+                            geoObj.instance = geoObj.instanceSmall;
+                        }
                         this.myMap.geoObjects.add(geoObj.instance);
                     }
                 } else {
@@ -120,13 +137,19 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
                 if (object.type === GEO_OBJECTS_TYPES.ROUTE) {
                     this.geoObjects.push({
                         kind: object.kind,
-                        instance: this.createRoute(object)
+                        instance: this.createRoute(object, 'MEDIUM'),
+                        instanceSmall: this.createRoute(object, 'SMALL'),
+                        instanceMedium: this.createRoute(object, 'MEDIUM'),
+                        instanceLarge: this.createRoute(object, 'LARGE')
                     });
                 }
                 if (object.type === GEO_OBJECTS_TYPES.PLACEMARK) {
                     this.geoObjects.push({
                         kind: object.kind,
-                        instance: this.createPlacemark(object)
+                        instance: this.createPlacemark(object, 'MEDIUM'),
+                        instanceSmall: this.createPlacemark(object, 'SMALL'),
+                        instanceMedium: this.createPlacemark(object, 'MEDIUM'),
+                        instanceLarge: this.createPlacemark(object, 'LARGE')
                     });
                 }
             }.bind(this));
@@ -145,9 +168,10 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
         /**
          *
          * @param object
+         * @param size
          * @returns {ymaps.Polyline}
          */
-        createRoute: function (object) {
+        createRoute: function (object, size) {
             return new ymaps.Polyline(object.coordinates, {
                     id: object.properties.id,
                     name: object.properties.name,
@@ -162,21 +186,20 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
         /**
          *
          * @param object
+         * @param size
          * @returns {ymaps.Placemark}
          */
-        createPlacemark: function (object) {
+        createPlacemark: function (object, size) {
             return new ymaps.Placemark(object.coordinates, {
-
                     id: object.properties.id,
                     name: object.properties.name,
                     description: object.properties.description
                 }, {
-                    preset: 'islands#glyphIcon', //object.properties.preset, 'islands#glyphCircleIcon',
-                    iconGlyph: 'wrench'
-                    // iconGlyphColor: 'green', // цвет глифа
-                    // iconColor: 'green', // цвет самой метки
-                    // balloonCloseButton: true,
-                    // hideIconOnBalloonOpen: false
+                    iconLayout: 'default#image',
+                    iconImageClipRect: MARKER[size][object.properties.color],
+                    iconImageHref: 'img/markers_sprite.png',
+                    iconImageSize: MARKER[size].SIZE,
+                    iconImageOffset: MARKER[size].OFFSET
                 }
             )
         },
@@ -210,28 +233,6 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
          */
         mapReady: function () {
             this.render();
-
-            var myPlacemark1 = new ymaps.Placemark([27.54613187718493,
-             53.91824749634943], {}, {
-             iconLayout: 'default#image',
-             iconImageClipRect: [[3,58], [30, 98]],
-             iconImageHref: 'img/markers_sprite.png',
-             iconImageSize: [27, 40],
-             iconImageOffset: [-14, -40]
-             });
-
-             this.myMap.geoObjects.add(myPlacemark1);
-
-             /*var myPlacemark2 = new ymaps.Placemark([27.55613187718493,
-             53.91824749634943], {}, {
-             iconLayout: 'default#image',
-             iconImageClipRect: [[30,0], [54, 28]],
-             iconImageHref: 'img/markers.png',
-             iconImageSize: [24, 28],
-             iconImageOffset: [-12, -28]
-             });
-
-             this.myMap.geoObjects.add(myPlacemark2);*/
         },
 
         /**
@@ -245,7 +246,6 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
          *
          */
         menuChange: function (data) {
-
             if (data.checked) {
                 this.showGeoObjects(data.kind);
             } else {
@@ -262,6 +262,16 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow'], funct
             this.displaySettingsLoaded = true;
 
             if (this.geoobjectsCreated) {
+                this.renderGeoObjects(this.geoObjects);
+            }
+        },
+
+        /**
+         *
+         */
+        ratingsUpdated: function () {
+            if (this.geoobjectsCreated) {
+                this.myMap.geoObjects.removeAll();
                 this.renderGeoObjects(this.geoObjects);
             }
         }
