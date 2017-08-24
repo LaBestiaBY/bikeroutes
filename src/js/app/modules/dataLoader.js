@@ -29,9 +29,7 @@ define(['jquery', 'eventManager'], function ($, eventManager) {
          */
         load: function (source) {
             $.getJSON( source, this.loadHandler)
-                .fail(function( jqxhr, status, error ) {
-                    eventManager.dispatch('data_load_failed', {status: status, error: error});
-                });
+                .fail(this.loadFailedHandler);
         },
 
         /**
@@ -47,6 +45,10 @@ define(['jquery', 'eventManager'], function ($, eventManager) {
          */
         loadHandler: function (data) {
             eventManager.dispatch('data_loaded', data);
+        },
+
+        loadFailedHandler: function (jqxhr, status, error) {
+            eventManager.dispatch('data_load_failed', {status: status, error: error});
         }
     };
 });

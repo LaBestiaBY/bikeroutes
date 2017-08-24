@@ -45,6 +45,10 @@ define(['underscore', 'jquery', 'text!../../../html_templates/tmpl_main_menu.htm
                 if (el.hasClass('sign-out')) {
                     fb.signOut();
                 }
+                if (el.hasClass('path-find')) {
+                    console.log('MENU: building new path');
+                    eventManager.dispatch('path_find_mode');
+                }
             },
 
             /**

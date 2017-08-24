@@ -41,11 +41,14 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow', 'modul
     };
 
     var ROUTE = {
+        SMALL: {
+            SIZE: 2
+        },
         MEDIUM: {
-            SIZE: 0
+            SIZE: 3
         },
         LARGE: {
-            SIZE: 1
+            SIZE: 4
         }
 
     };
@@ -56,6 +59,7 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow', 'modul
         displaySettings: {},
         geoobjectsCreated: false,
         displaySettingsLoaded: false,
+        pathFindMode: false,
 
         /**
          *
@@ -69,18 +73,19 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow', 'modul
          *
          */
         setupHandlers: function () {
-
             this.mapReadyHandler = this.mapReady.bind(this);
             this.dataLoadedHandler = this.dataLoaded.bind(this);
             this.menuChangeHandler = this.menuChange.bind(this);
             this.userSettingsSetHandler = this.userSettingsSet.bind(this);
             this.ratingsUpdatedHandler = this.ratingsUpdated.bind(this);
+            this.pathFindModeHandler = this.pathFindModeEnter.bind(this);
 
             ymaps.ready(this.mapReadyHandler);
             eventManager.subscribe('data_loaded', this.dataLoadedHandler);
             eventManager.subscribe('menu_changed', this.menuChangeHandler);
             eventManager.subscribe('user_settings_set', this.userSettingsSetHandler);
             eventManager.subscribe('ratings_updated', this.ratingsUpdatedHandler);
+            eventManager.subscribe('path_find_mode', this.pathFindModeHandler);
         },
 
         /**
@@ -94,8 +99,9 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow', 'modul
             });
 
             this.myMap.setBounds([BOUNDS.TOP_LEFT, BOUNDS.BOTTOM_RIGHT]);
+            this.myMap.events.add('click', this.mapClickHandler.bind(this));
 
-
+            // --
             ymaps.route([[27.576869587333135, 53.921639713562904],
                 [27.577776, 53.915586]], {
                 multiRoute: true,
@@ -121,6 +127,7 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow', 'modul
             }.bind(this), function (err) {
                 throw err;
             }, this);
+            // --
 
             eventManager.dispatch('map_rendered');
         },
@@ -183,9 +190,28 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow', 'modul
                 this.renderGeoObjects(this.geoObjects);
             }
 
-            this.myMap.geoObjects.events.add('click', function (e) {
+            this.myMap.geoObjects.events.add('click', this.geoObjectsClickHandler.bind(this));
+        },
+
+        /**
+         *
+         * @param e
+         */
+        geoObjectsClickHandler: function (e) {
+            console.log('pathFindMode = ' + this.pathFindMode);
+            if (!this.pathFindMode)
+            {
                 infoWindow.show(e.get('target').properties.get('name'), e.get('target').properties.get('description'), e.get('target').properties.get('id'));
-            });
+            }
+
+        },
+
+        /**
+         *
+         * @param e
+         */
+        mapClickHandler: function (e) {
+            console.log('map click confirmed!');
         },
 
         /**
@@ -201,7 +227,7 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow', 'modul
                     description: object.properties.description
                 }, {
                     strokeColor: "0000FF88",
-                    strokeWidth: object.properties['stroke-width']
+                    strokeWidth: ROUTE[size].SIZE
                 }
             )
         },
@@ -297,6 +323,14 @@ define(['ymaps', 'jquery', 'eventManager', 'modules/geoObjectInfoWindow', 'modul
                 this.myMap.geoObjects.removeAll();
                 this.renderGeoObjects(this.geoObjects);
             }
+        },
+
+        /**
+         *
+         */
+        pathFindModeEnter: function () {
+            console.log('MAP: building new path');
+            this.pathFindMode = true;
         }
     };
 });
