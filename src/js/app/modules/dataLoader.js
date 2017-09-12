@@ -52,3 +52,4 @@ define(['jquery', 'eventManager'], function ($, eventManager) {
         }
     };
 });
+

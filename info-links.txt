@@ -1,0 +1,21 @@
+https://tech.yandex.ru/maps/doc/jsapi/2.1/ref/reference/Map-docpage/
+
+https://tech.yandex.ru/maps/doc/jsapi/2.1/dg/concepts/geoobjects-docpage/#glyph-icons
+
+https://tech.yandex.ru/maps/doc/jsapi/2.1/dg/concepts/router-docpage/
+
+https://tech.yandex.ru/maps/doc/jsapi/2.1/ref/reference/router.Route-docpage/#getPaths
+
+https://yandex.ru/blog/mapsapi/31364
+
+
+API Поиска по организациям
+https://tech.yandex.ru/maps/geosearch/?from=mapsapi
+
+
+
+Map of bike routes
+https://afisha.tut.by/news/places/495169.html
+
+Map with instagram
+http://webmap-blog.ru/bez-rubriki/prodolzhaem-izuchat-api-yandeks-kart-2-1-rabotaem-s-metkami
